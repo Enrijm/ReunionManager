@@ -5,6 +5,8 @@ import enrique.application.reunionManager.exceptions.ReventaoNotFoundException;
 import enrique.application.reunionManager.repo.ReventaoRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+
 import java.util.List;
 
 @Service
@@ -37,6 +39,7 @@ public class ReventaoService {
     public void deleteById(Long id){
         reventaoRepo.deleteReventaoById(id)
                 .orElseThrow(()-> new ReventaoNotFoundException("Reventao con id: "+id+" no encontrado"));
+
     }
 
 }

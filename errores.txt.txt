@@ -1,0 +1,3 @@
+- si meto un reventao dos veces , lo guarda con dos id diferentes pero misma persona 
+- el metodo override de toString no le sale de la polla funcionar
+- 

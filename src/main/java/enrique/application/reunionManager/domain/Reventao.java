@@ -80,7 +80,7 @@ public class Reventao implements Serializable {
     public String toString(){
         return "Reventao{ " +  "Id_Reventao: " + id
         + "Nombre: " + name + " Aka: " + aka +
-        " Comentarios extra: " + comments +
+        " Comentarios: " + comments +
         " Latas cerveza por dia: " + numbers_cans_day +
         " Dinero a poner: " + money_to_put + " €"+
         " Disponibilidad: " + disponibility + " }";
