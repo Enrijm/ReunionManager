@@ -1,29 +1,35 @@
 package enrique.application.reunionManager.controller;
 
 import enrique.application.reunionManager.domain.Reventao;
+import enrique.application.reunionManager.domain.Role;
 import enrique.application.reunionManager.service.ReventaoService;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/reventao")
+@RequiredArgsConstructor
+@RequestMapping("/api")
 
 public class ReventaoController {
 
     private final ReventaoService service;
 
-    @Autowired
-    public ReventaoController(ReventaoService service) {
-        this.service = service;
+    @GetMapping
+    public ResponseEntity<String> MostrarInfo(){
+        return ResponseEntity.ok().body("Estamos dentro del API");
     }
 
-    @GetMapping("/all")
+    @GetMapping("/reventaos")
     public ResponseEntity<List<Reventao> > getAll(){
-        return new ResponseEntity<>(service.findAllReventaos(), HttpStatus.OK);
+        return ResponseEntity.ok().body(service.findAllReventaos());
     }
 
     @GetMapping("/nombre/{name}")
@@ -31,21 +37,47 @@ public class ReventaoController {
         return service.findByName(name);
     }
 
-    @PostMapping("/add")
+    @PostMapping("/reventao/add")
     public ResponseEntity<Reventao> add(@RequestBody Reventao reventao){
-        service.addReventao(reventao);
-        return new ResponseEntity<>(service.addReventao(reventao),HttpStatus.CREATED);
+        //return new ResponseEntity<>(service.addReventao(reventao),HttpStatus.CREATED);
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("api/reventao/add").toUriString());
+        return ResponseEntity.created(uri).body(service.addReventao(reventao));
+    }
+
+    @PostMapping("/role/add")
+    public ResponseEntity<Role> add(@RequestBody Role role){
+        //return new ResponseEntity<>(service.addReventao(reventao),HttpStatus.CREATED);
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/role/add").toUriString());
+        return ResponseEntity.created(uri).body(service.saveRole(role));
+    }
+
+    @PostMapping("/role/addtouser")
+    public ResponseEntity<?> addRoleToReventao(@RequestBody RoleToUserForm form){
+        service.addRoleToReventao(form.getUsername(),form.getRolename());
+        // i am not putting here the body because AddRoleToReventao is a void
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/update")
     public ResponseEntity<Reventao> update(@RequestBody Reventao reventao){
-        return new ResponseEntity<>(service.updateReventao(reventao), HttpStatus.OK);
+        return ResponseEntity.ok().body(service.updateReventao(reventao));
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id){
+        service.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
+
 }
+
+// for be able to manage the @RequesBody of the controller /role/addtouser
+@Data
+class RoleToUserForm{
+    private String username;
+    private String rolename;
+}
+
+
