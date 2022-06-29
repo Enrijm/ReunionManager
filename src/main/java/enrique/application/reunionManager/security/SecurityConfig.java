@@ -15,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
@@ -33,10 +34,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        // edit of the default config login of SpringBoot
+        // injection of the customFilter
+        CustomAuthentificationFilter customAuthentificationFilter = new CustomAuthentificationFilter(authenticationManagerBean());
+        customAuthentificationFilter.setFilterProcessesUrl("/api/login");
+
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
-        http.authorizeRequests().anyRequest().permitAll();
-        http.addFilter(new CustomAuthentificationFilter(authenticationManagerBean()));
+        // Permissions
+        http.authorizeRequests().antMatchers("/api/login/**").permitAll(); // This login is SB who do it but I can edit it
+        http.authorizeRequests().antMatchers(GET,"/api/reventaos").hasAnyAuthority("ROLE_USER");
+        http.authorizeRequests().antMatchers(PUT,"/api/update").hasAnyAuthority("ROLE_ADMIN");
+        http.authorizeRequests().antMatchers(GET,"/api/nombre/**").hasAnyAuthority("ROLE_SUPER_ADMIN");
+        http.authorizeRequests().antMatchers(POST,"/api/reventao/add").hasAnyAuthority("ROLE_MANAGER");
+        http.authorizeRequests().antMatchers(POST,"/api/role/**").hasAnyAuthority("ROLE_USER");
+        http.authorizeRequests().antMatchers(DELETE,"/api/delete/**").hasAnyAuthority("ROLE_SUPER_ADMIN");
+
+        // http.authorizeRequests().anyRequest().permitAll(); Noe we do not want all people enter in the app so we update the code with :
+        http.authorizeRequests().anyRequest().authenticated();
+
+        http.addFilter(customAuthentificationFilter);
     }
 
     @Bean

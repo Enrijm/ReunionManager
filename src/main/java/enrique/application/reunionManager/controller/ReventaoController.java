@@ -24,7 +24,7 @@ public class ReventaoController {
 
     @GetMapping
     public ResponseEntity<String> MostrarInfo(){
-        return ResponseEntity.ok().body("Estamos dentro del API");
+        return ResponseEntity.ok().body("Good logging inside the API");
     }
 
     @GetMapping("/reventaos")
