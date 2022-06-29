@@ -1,0 +1,19 @@
+- Filters:
+    Authentication      ---> Verify you are who you say you are
+
+    Authorization       ---> Decides if you have permission to access a resource
+
+- Password Encoder:
+
+    BCryptPasswordEncoder ---> Controller addUser -> setPassword -> PasswordEncoder
+
+
+- Config:
+
+                                                                        -----> Permissions
+                           ---->           HttpSecurity Configure
+                                                                        -----> Filters
+    SecurityConfig   --->
+
+                           ---->           AuthenticationManagerBuilder Configure   ---->      userDetailsService
+

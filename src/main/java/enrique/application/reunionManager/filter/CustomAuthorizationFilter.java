@@ -39,9 +39,13 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
             if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
                 try{
                     String token = authorizationHeader.substring("Bearer ".length());
+
                     Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+
                     JWTVerifier verifier = JWT.require(algorithm).build();
+
                     DecodedJWT decoded = verifier.verify(token);
+
                     // when we verify that the token is valid
                     String username = decoded.getSubject();
                     String[] roles = decoded.getClaim("roles").asArray(String.class); // Be careful with this String inside getClaim because it is named by us in SuccesfulAuthentification
