@@ -22,6 +22,7 @@ public class Reventao implements Serializable {
     @Column(nullable = false,updatable = false)
     public Long id;
     public String name;
+    public String password;
     public String aka;
     public String comments;
     public int numbers_cans_day;
@@ -29,7 +30,6 @@ public class Reventao implements Serializable {
     public String disponibility;
     @ManyToMany(fetch = EAGER)
     private Collection<Role> roles = new ArrayList<>();
-
 
     @Override
     public String toString(){
@@ -40,4 +40,5 @@ public class Reventao implements Serializable {
         " Dinero a poner: " + money_to_put + " €"+
         " Disponibilidad: " + disponibility + " }";
     }
+
 }
