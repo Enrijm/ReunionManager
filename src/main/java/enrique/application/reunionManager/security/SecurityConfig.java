@@ -45,6 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(STATELESS);
         // Permissions
         http.authorizeRequests().antMatchers("/api/login/**").permitAll(); // This login is SB who do it but I can edit it
+        http.authorizeRequests().antMatchers("/token/refresh/**").permitAll();
         http.authorizeRequests().antMatchers(GET,"/api/reventaos").hasAnyAuthority("ROLE_USER");
         http.authorizeRequests().antMatchers(PUT,"/api/update").hasAnyAuthority("ROLE_ADMIN");
         http.authorizeRequests().antMatchers(GET,"/api/nombre/**").hasAnyAuthority("ROLE_SUPER_ADMIN");
